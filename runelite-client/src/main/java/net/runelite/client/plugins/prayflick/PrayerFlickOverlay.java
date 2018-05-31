@@ -114,6 +114,6 @@ public class PrayerFlickOverlay extends Overlay
 			}
 		}
 
-		return false;
+		return true;
 	}
 }

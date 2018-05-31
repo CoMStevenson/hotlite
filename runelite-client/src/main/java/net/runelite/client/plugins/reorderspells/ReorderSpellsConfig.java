@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Cameron <https://github.com/noremac201>
+ * Copyright (c) 2018, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -21,37 +21,59 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package net.runelite.client.plugins.barbarianassault;
+ *//*
 
+package net.runelite.client.plugins.reorderspells;
+
+import net.runelite.api.Prayer;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
 @ConfigGroup(
-	keyName = "barbarianAssault",
-	name = "Barbarian Assault",
-	description = "Configuration for the barbarian assault plugin"
+        keyName = ReorderSpellsPlugin.CONFIG_GROUP_KEY,
+        name = "Reorder Spells",
+        description = "Configuration for the data orb regeneration meters"
 )
-public interface BarbarianAssaultConfig extends Config
+public interface ReorderSpellsConfig extends Config
 {
-	@ConfigItem(
-			keyName = "removeUnused",
-			name = "Remove incorrect calls",
-			description = "Removes incorrect calls for Role Horn"
-	)
-	default boolean removeWrong()
-	{
-		return true;
-	}
 
-	@ConfigItem(
-		keyName = "showTimer",
-		name = "Show call change timer",
-		description = "Show time to next call change"
-	)
-	default boolean showTimer()
-	{
-		return true;
-	}
+    @ConfigItem(
+            keyName = ReorderSpellsPlugin.CONFIG_UNLOCK_REORDERING_KEY,
+            name = "Unlock Spell Reordering",
+            description = "Configures whether or not you can reorder the spells",
+            position = 1
+    )
+    default boolean unlockSpellReordering()
+    {
+        return false;
+    }
+
+    @ConfigItem(
+            keyName = ReorderSpellsPlugin.CONFIG_UNLOCK_REORDERING_KEY,
+            name = "",
+            description = ""
+    )
+    void unlockSpellReordering(boolean unlock);
+
+    @ConfigItem(
+            keyName = ReorderSpellsPlugin.CONFIG_SPELL_ORDER_KEY,
+            name = "Spell Order",
+            description = "Configures the order of the spells",
+            hidden = true,
+            position = 2
+    )
+    default String spellOrder()
+    {
+        return ReorderSpellsPlugin.spellOrderToString(Spell.values());
+    }
+
+    @ConfigItem(
+            keyName = ReorderSpellsPlugin.CONFIG_SPELL_ORDER_KEY,
+            name = "",
+            description = ""
+    )
+    void spellOrder(String spellOrder);
+
 }
+*/

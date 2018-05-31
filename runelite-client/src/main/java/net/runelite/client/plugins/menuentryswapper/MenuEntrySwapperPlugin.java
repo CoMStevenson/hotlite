@@ -329,9 +329,34 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String option = Text.removeTags(event.getOption()).toLowerCase();
 		String target = Text.removeTags(event.getTarget()).toLowerCase();
 
+		if (option.equals("withdraw-1"))
+		{
+			swap("withdraw-13", option, target, true);
+			swap("withdraw-14", option, target, true);
+			swap("withdraw-25", option, target, true);
+			swap("withdraw-26", option, target, true);
+			swap("withdraw-27", option, target, true);
+			swap("withdraw-28", option, target, true);
+		}
+		if (option.equals("deposit-1"))
+		{
+			swap("deposit-13", option, target, true);
+			swap("deposit-14", option, target, true);
+			swap("deposit-25", option, target, true);
+			swap("deposit-26", option, target, true);
+			swap("deposit-27", option, target, true);
+			swap("deposit-28", option, target, true);
+		}
+		if (option.equals("attack"))
+		{
+			if (config.swapPickpocket())
+			{
+				swap("pickpocket", option, target, true);
+			}
+		}
 		if (option.equals("talk-to"))
 		{
-			if (config.swapPickpocket() && target.contains("h.a.m."))
+			if (config.swapPickpocket())
 			{
 				swap("pickpocket", option, target, true);
 			}
