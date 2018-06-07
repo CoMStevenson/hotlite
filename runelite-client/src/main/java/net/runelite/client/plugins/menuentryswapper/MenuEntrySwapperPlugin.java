@@ -27,6 +27,8 @@ package net.runelite.client.plugins.menuentryswapper;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Provides;
+
+import java.sql.Time;
 import java.util.Collection;
 import java.util.Collections;
 import javax.inject.Inject;
@@ -54,6 +56,36 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.util.Text;
 import org.apache.commons.lang3.ArrayUtils;
+import com.google.common.eventbus.Subscribe;
+import com.google.inject.Provides;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.ItemComposition;
+import net.runelite.api.MessageNode;
+import net.runelite.api.events.SetMessage;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.util.StackFormatter;
+import net.runelite.http.api.hiscore.HiscoreClient;
+import net.runelite.http.api.hiscore.HiscoreSkill;
+import net.runelite.http.api.hiscore.SingleHiscoreSkillResult;
+import net.runelite.http.api.hiscore.Skill;
+import net.runelite.http.api.item.Item;
+import net.runelite.http.api.item.ItemPrice;
+import net.runelite.http.api.item.SearchResult;
+import java.util.concurrent.TimeUnit;
 
 @PluginDescriptor(
 	name = "Menu Entry Swapper",
@@ -107,6 +139,15 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	@Inject
 	private MenuManager menuManager;
+
+	@Inject
+	private ChatMessageManager chatMessageManager;
+
+	@Inject
+	private ScheduledExecutorService executor;
+
+	@Inject
+	private SetMessage setMessage;
 
 	@Getter
 	private boolean configuringShiftClick = false;
@@ -317,9 +358,9 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 	}
 
+
 	@Subscribe
-	public void onMenuEntryAdded(MenuEntryAdded event)
-	{
+	public void onMenuEntryAdded(MenuEntryAdded event) throws InterruptedException {
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
@@ -329,6 +370,16 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String option = Text.removeTags(event.getOption()).toLowerCase();
 		String target = Text.removeTags(event.getTarget()).toLowerCase();
 
+		if(option.equals("talk-to"))
+{
+	swap("pickpocket", option, target, true);
+}
+
+
+		if (option.contains("examine"))
+		{
+			swap("search", option, target, false);
+		}
 		if (option.equals("withdraw-1"))
 		{
 			swap("withdraw-13", option, target, true);
@@ -347,6 +398,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 			swap("deposit-27", option, target, true);
 			swap("deposit-28", option, target, true);
 		}
+		if(option.equals("make-1"))
+		{
+			swap("make-all", option, target, true);
+		}
 		if (option.equals("attack"))
 		{
 			if (config.swapPickpocket())
@@ -358,7 +413,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			if (config.swapPickpocket())
 			{
-				swap("pickpocket", option, target, true);
+				swap("knock-out", option, target, true);
 			}
 
 			if (config.swapAbyssTeleport() && target.contains("mage of zamorak"))
