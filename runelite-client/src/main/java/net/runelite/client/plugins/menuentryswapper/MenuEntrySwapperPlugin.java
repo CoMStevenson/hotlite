@@ -374,7 +374,14 @@ public class MenuEntrySwapperPlugin extends Plugin
 {
 	swap("pickpocket", option, target, true);
 }
-
+		if(option.equals("smith 1 set"))
+		{
+			swap("smith all sets", option, target, true);
+		}
+		if (target.equals("iron ore"))
+		{
+			swap("drop", option, target, true);
+		}
 
 		if (option.contains("examine"))
 		{
