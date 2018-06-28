@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DennisDeV <https://github.com/DevDennis>
+ * Copyright (c) 2018, Devin French <https://github.com/devinfrench>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,45 +22,47 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.antidrag;
+package net.runelite.client.plugins.zulrah.rotation;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.plugins.zulrah.phase.SafeLocation;
+import net.runelite.client.plugins.zulrah.phase.ZulrahLocation;
+import net.runelite.client.plugins.zulrah.phase.ZulrahPhase;
+import net.runelite.client.plugins.zulrah.phase.ZulrahType;
 
-@ConfigGroup(
-  keyName = AntiDragPlugin.CONFIG_GROUP,
-  name = "Anti Drag",
-  description = "Configuration for the anti drag plugin"
-)
-public interface AntiDragConfig extends Config
+import java.util.ArrayList;
+import java.util.List;
+
+public class ZulrahRotation
 {
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "Drag Delay",
-	  description = "Configures the inventory drag delay in client ticks (20ms)",
-	  position = 1
-	)
-	default int dragDelay()
+	private List<ZulrahPhase> rotation = new ArrayList<>();
+
+	public void add(ZulrahLocation zulrahLocation, ZulrahType type, boolean jad, SafeLocation safeLocation)
 	{
-		return 600 / 20; // one game tick
+		rotation.add(new ZulrahPhase(zulrahLocation, type, jad, safeLocation));
 	}
 
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "",
-	  description = ""
-	)
-	void dragDelay(int delay);
-
-	@ConfigItem(
-	  keyName = "onShiftOnly",
-	  name = "On Shift Only",
-	  description = "Configures whether to only adjust the delay while holding shift",
-	  position = 2
-	)
-	default boolean onShiftOnly()
+	public void add(ZulrahLocation zulrahLocation, ZulrahType type, SafeLocation safeLocation)
 	{
-		return true;
+		add(zulrahLocation, type, false, safeLocation);
+	}
+
+	public ZulrahPhase getPhase(int stage)
+	{
+		if (stage >= rotation.size())
+		{
+			return null;
+		}
+		return rotation.get(stage);
+	}
+
+	public boolean stageEquals(int stage, ZulrahPhase phase)
+	{
+
+		return phase != null && phase.equals(getPhase(stage));
+	}
+
+	public boolean canReset(int stage)
+	{
+		return stage >= rotation.size();
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DennisDeV <https://github.com/DevDennis>
+ * Copyright (c) 2018, Devin French <https://github.com/devinfrench>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,45 +22,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.antidrag;
+package net.runelite.client.plugins.zulrah.phase;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.NPC;
+import net.runelite.api.NpcID;
 
-@ConfigGroup(
-  keyName = AntiDragPlugin.CONFIG_GROUP,
-  name = "Anti Drag",
-  description = "Configuration for the anti drag plugin"
-)
-public interface AntiDragConfig extends Config
+@Slf4j
+public enum ZulrahType
 {
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "Drag Delay",
-	  description = "Configures the inventory drag delay in client ticks (20ms)",
-	  position = 1
-	)
-	default int dragDelay()
-	{
-		return 600 / 20; // one game tick
-	}
+	RANGE,
+	MAGIC,
+	MELEE;
 
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "",
-	  description = ""
-	)
-	void dragDelay(int delay);
+	private static final int ZULRAH_RANGE = NpcID.ZULRAH;
+	private static final int ZULRAH_MELEE = NpcID.ZULRAH_2043;
+	private static final int ZULRAH_MAGIC = NpcID.ZULRAH_2044;
 
-	@ConfigItem(
-	  keyName = "onShiftOnly",
-	  name = "On Shift Only",
-	  description = "Configures whether to only adjust the delay while holding shift",
-	  position = 2
-	)
-	default boolean onShiftOnly()
+	public static ZulrahType valueOf(NPC zulrah)
 	{
-		return true;
+		int id = zulrah.getId();
+		switch (id)
+		{
+			case ZULRAH_RANGE:
+				return ZulrahType.RANGE;
+			case ZULRAH_MELEE:
+				return ZulrahType.MELEE;
+			case ZULRAH_MAGIC:
+				return ZulrahType.MAGIC;
+		}
+		log.debug("Unknown Zulrah Id: {}", id);
+		return null;
 	}
 }

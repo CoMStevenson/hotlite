@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DennisDeV <https://github.com/DevDennis>
+ * Copyright (c) 2018, Devin French <https://github.com/devinfrench>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,45 +22,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.antidrag;
+package net.runelite.client.plugins.zulrah.rotation;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.plugins.zulrah.phase.SafeLocation;
+import net.runelite.client.plugins.zulrah.phase.ZulrahLocation;
+import net.runelite.client.plugins.zulrah.phase.ZulrahType;
 
-@ConfigGroup(
-  keyName = AntiDragPlugin.CONFIG_GROUP,
-  name = "Anti Drag",
-  description = "Configuration for the anti drag plugin"
-)
-public interface AntiDragConfig extends Config
+public class ZulrahRotationOne extends ZulrahRotation
 {
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "Drag Delay",
-	  description = "Configures the inventory drag delay in client ticks (20ms)",
-	  position = 1
-	)
-	default int dragDelay()
+	public ZulrahRotationOne()
 	{
-		return 600 / 20; // one game tick
+		add(ZulrahLocation.NORTH, ZulrahType.RANGE, SafeLocation.TOP_EAST);
+		add(ZulrahLocation.NORTH, ZulrahType.MELEE, SafeLocation.TOP_EAST);
+		add(ZulrahLocation.NORTH, ZulrahType.MAGIC, SafeLocation.PILLAR_WEST_INSIDE);
+		add(ZulrahLocation.SOUTH, ZulrahType.RANGE, SafeLocation.PILLAR_WEST_INSIDE);
+		add(ZulrahLocation.NORTH, ZulrahType.MELEE, SafeLocation.PILLAR_WEST_INSIDE);
+		add(ZulrahLocation.WEST, ZulrahType.MAGIC, SafeLocation.PILLAR_WEST_INSIDE);
+		add(ZulrahLocation.SOUTH, ZulrahType.RANGE, SafeLocation.PILLAR_EAST_OUTSIDE);
+		add(ZulrahLocation.SOUTH, ZulrahType.MAGIC, SafeLocation.SOUTH_WEST);
+		add(ZulrahLocation.WEST, ZulrahType.RANGE, true, SafeLocation.TOP_WEST);
+		add(ZulrahLocation.NORTH, ZulrahType.MELEE, SafeLocation.TOP_WEST);
+		add(ZulrahLocation.NORTH, ZulrahType.RANGE, SafeLocation.TOP_WEST);
 	}
 
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "",
-	  description = ""
-	)
-	void dragDelay(int delay);
-
-	@ConfigItem(
-	  keyName = "onShiftOnly",
-	  name = "On Shift Only",
-	  description = "Configures whether to only adjust the delay while holding shift",
-	  position = 2
-	)
-	default boolean onShiftOnly()
+	@Override
+	public String toString()
 	{
-		return true;
+		return "Rotation 1";
 	}
 }

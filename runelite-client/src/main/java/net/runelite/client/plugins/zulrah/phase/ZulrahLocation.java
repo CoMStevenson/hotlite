@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, DennisDeV <https://github.com/DevDennis>
+ * Copyright (c) 2018, Devin French <https://github.com/devinfrench>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,45 +22,45 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.antidrag;
+package net.runelite.client.plugins.zulrah.phase;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.NPC;
+import net.runelite.api.coords.WorldPoint;
 
-@ConfigGroup(
-  keyName = AntiDragPlugin.CONFIG_GROUP,
-  name = "Anti Drag",
-  description = "Configuration for the anti drag plugin"
-)
-public interface AntiDragConfig extends Config
+@Slf4j
+public enum ZulrahLocation
 {
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "Drag Delay",
-	  description = "Configures the inventory drag delay in client ticks (20ms)",
-	  position = 1
-	)
-	default int dragDelay()
-	{
-		return 600 / 20; // one game tick
-	}
+	NORTH,
+	SOUTH,
+	EAST,
+	WEST;
 
-	@ConfigItem(
-	  keyName = "dragDelay",
-	  name = "",
-	  description = ""
-	)
-	void dragDelay(int delay);
-
-	@ConfigItem(
-	  keyName = "onShiftOnly",
-	  name = "On Shift Only",
-	  description = "Configures whether to only adjust the delay while holding shift",
-	  position = 2
-	)
-	default boolean onShiftOnly()
+	public static ZulrahLocation valueOf(WorldPoint start, NPC zulrah)
 	{
-		return true;
+		WorldPoint current = zulrah.getWorldLocation();
+		int dx = start.getX() - current.getX();
+		int dy = start.getY() - current.getY();
+		if (dx == -10 && dy == 2)
+		{
+			return ZulrahLocation.EAST;
+		}
+		else if (dx == 10 && dy == 2)
+		{
+			return ZulrahLocation.WEST;
+		}
+		else if (dx == 0 && dy == 11)
+		{
+			return ZulrahLocation.SOUTH;
+		}
+		else if (dx == 0 && dy == 0)
+		{
+			return ZulrahLocation.NORTH;
+		}
+		else
+		{
+			log.debug("Unknown Zulrah location dx: {}, dy: {}", dx, dy);
+			return null;
+		}
 	}
 }
