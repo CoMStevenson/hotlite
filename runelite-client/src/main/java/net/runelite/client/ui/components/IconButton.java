@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, Adam <Adam@sigterm.info>
+ * Copyright (c) 2018, Daniel Teo <https://github.com/takuyakanbr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,21 +22,50 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.mapping;
+package net.runelite.client.ui.components;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(
-	{
-		ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD
-	})
-public @interface ObfuscatedSignature
+/**
+ * A button that consists of an icon, without any background, borders, or margins.
+ */
+public class IconButton extends JButton
 {
-	String signature();
+	public IconButton(ImageIcon icon)
+	{
+		this(icon, null);
+	}
 
-	String garbageValue() default ""; // valid garbage value for last parameter. can't be an Object because Java.
+	public IconButton(ImageIcon icon, ImageIcon hoverIcon)
+	{
+		setIcon(icon);
+		setBorderPainted(false);
+		setContentAreaFilled(false);
+		setFocusPainted(false);
+		setMargin(new Insets(0, 0, 0, 0));
+		setOpaque(false);
+		setRolloverEnabled(false);
+
+		if (hoverIcon != null)
+		{
+			addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					setIcon(hoverIcon);
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e)
+				{
+					setIcon(icon);
+				}
+			});
+		}
+	}
 }
