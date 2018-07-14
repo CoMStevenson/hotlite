@@ -26,17 +26,19 @@ package net.runelite.client.plugins.antidrag;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Provides;
-import java.awt.event.KeyEvent;
-import javax.inject.Inject;
 import net.runelite.api.Client;
-import net.runelite.api.events.FocusChanged;
+import net.runelite.api.events.ConfigChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import javax.inject.Inject;
+import java.awt.event.KeyEvent;
 
 @PluginDescriptor(
+  name = "Anti Drag",
+  enabledByDefault = false
 	name = "Shift Anti Drag",
 	description = "Prevent dragging an item for a specified delay",
 	tags = {"antidrag", "delay", "inventory", "items"}

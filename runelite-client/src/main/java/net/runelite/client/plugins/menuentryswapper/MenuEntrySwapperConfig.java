@@ -229,6 +229,7 @@ public interface MenuEntrySwapperConfig extends Config
 		return true;
 	}
 
+
 	@ConfigItem(
 		position = 18,
 		keyName = "swapAssignment",
@@ -240,9 +241,8 @@ public interface MenuEntrySwapperConfig extends Config
 		return true;
 	}
 
-
 	@ConfigItem(
-	  position = 19,
+	  position = 100,
 	  keyName = "depositX",
 	  name = "Deposit X",
 	  description = "Swap Deposit-1 with saved Deposit-X amount"
@@ -253,7 +253,7 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
-	  position = 20,
+	  position = 101,
 	  keyName = "withdrawX",
 	  name = "Withdraw X",
 	  description = "Swap Withdraw-1 with saved Withdraw-X amount"
@@ -264,7 +264,7 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
-	  position = 21,
+	  position = 102,
 	  keyName = "construction",
 	  name = "Build / Remove",
 	  description = "Swap Build or Remove to left click"
@@ -273,5 +273,4 @@ public interface MenuEntrySwapperConfig extends Config
 	{
 		return false;
 	}
-
 }
